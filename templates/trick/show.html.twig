@@ -1,42 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Trick{% endblock %}
+{% block title %}Trick
+{% endblock %}
 
 {% block body %}
-    <h1>Trick</h1>
+	<h1>Trick</h1>
+	<div class="featured-image-container">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ trick.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ trick.name }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ trick.slug }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ trick.description }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ trick.created ? trick.created|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Modified</th>
-                <td>{{ trick.modified ? trick.modified|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <img src="{{ asset(featuredImage)}}" alt="Image à la une de {{ trick.name }}" width="600" class="featured-image"> 
 
-    <a href="{{ path('app_trick_index') }}">back to list</a>
+		<div class="trick-name-overlay">{{ trick.name }}</div>
 
-    <a href="{{ path('app_trick_edit', {'id': trick.id}) }}">edit</a>
+		<div class="image-actions">
+<a href="{{ path('app_trick_edit', {'slug': trick.slug}) }}"><img src="{{ asset('Images/edit-icon.png') }}" alt="Modifier" width="20" height="20"></a>
+{{ include('trick/_delete_form.html.twig') }}
+		</div>
+	</div>
 
-    {{ include('trick/_delete_form.html.twig') }}
+<div class="trick-details">
+
+{# Affiche les images et vidéos sous forme de miniatures #}		
+<div class="media-thumbnails">
+        <div class="images">
+    {% for image in trick.images %}
+        <img src="{{ asset('uploads/tricks/' ~ image.name) }}" alt="Miniature {{ loop.index }}" class="thumbnail-image">
+    {% endfor %}
+	</div>
+    
+	<div class="videos">
+    {% for video in trick.videos %}
+        <iframe src="{{ video.name }}" class="thumbnail-video" allowfullscreen></iframe>
+    {% endfor %}
+	</div>
+</div>
+
+{# Description du trick #}
+    <div class="description">
+        <p>{{ trick.description }}</p>
+    </div>
+
+{# Détails en ligne en dessous : date de création, catégorie et date de modification #}
+    <div class="trick-info">
+        <span>Date de création : {{ trick.created|date('d/m/Y') }}</span>
+        <span>Catégorie : {{ trick.category.name }}</span>
+        <span>Date de modification : {{ trick.modified|date('d/m/Y') }}</span>
+    </div>
+
+</div>
+
+</tbody>
+
+{# {{ include('trick/_delete_form.html.twig') }} #}
+<a href="{{ path('app_trick_index') }}">back to list</a>
 {% endblock %}

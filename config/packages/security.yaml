@@ -16,6 +16,29 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            custom_authenticator: App\Security\LoginFormAuthenticator
+
+            entry_point: App\Security\LoginFormAuthenticator
+
+            form_login:
+                login_path: app_login         # Route pour afficher le formulaire de connexion
+                check_path: app_login         # Route où le formulaire est soumis pour traitement
+                default_target_path: app_home # Chemin après connexion réussie
+                enable_csrf: true
+                csrf_token_id: authenticate
+
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_index
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

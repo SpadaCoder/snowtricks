@@ -1,4 +1,36 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, { 'attr': {'enctype': 'multipart/form-data'}, 'method': 'POST' }) }}
+    {# {{ form_widget(form) }} #}
+
+    {# Si le Trick a un ID, on affiche le formulaire pour les vidéos #}
+    {# {% if trick.id %} #}
+        {# {% include 'video/add.html.twig' %} #}
+    {# {% endif %} #}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.category) }}
+
+    <div id="video-collection">
+        <h3>{{ form.videos.vars.label }}</h3>
+        {% for video in form.videos %}
+            <div class="video">
+                {{ form_row(video) }}
+                <button type="button" class="remove-video">Supprimer</button>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# <button type="button" class="add-video">Ajouter une vidéo</button> #}
+    
+    {{ form_row(form.images) }}
+
+
+
+
+{% if isEdit %}
+	<button type="submit">Mettre à jour le trick</button>
+{% else %}
+	<button type="submit">Créer le trick</button>
+{% endif %}
+
 {{ form_end(form) }}
