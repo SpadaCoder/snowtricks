@@ -9,6 +9,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[ORM\Table(name: 'trick', uniqueConstraints: [
+    new ORM\UniqueConstraint(name: 'UNIQ_TRICK_SLUG', fields: ['slug'])
+])]
 class Trick
 {
     #[ORM\Id]
@@ -19,7 +22,7 @@ class Trick
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -40,13 +43,13 @@ class Trick
     /**
      * @var Collection<int, Image>
      */
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'trick')]
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'trick', cascade: ['persist'], orphanRemoval: true)]
     private Collection $images;
 
     /**
      * @var Collection<int, Video>
      */
-    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'trick')]
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'trick', cascade:["persist"], orphanRemoval: true)]
     private Collection $videos;
 
     #[ORM\ManyToOne(inversedBy: 'trick')]

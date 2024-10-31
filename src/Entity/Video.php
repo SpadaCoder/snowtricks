@@ -19,7 +19,7 @@ class Video
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $provider = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos')]
+    #[ORM\ManyToOne(inversedBy: 'videos', cascade:["persist"])]
     private ?Trick $trick = null;
 
     public function getId(): ?int

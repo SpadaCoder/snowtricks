@@ -1,3 +1,176 @@
 body {
     background-color: skyblue;
+    padding: 10px 50px 10px 50px;
 }
+
+
+.featured-image-container {
+    position: relative;
+    text-align: inline-block;
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+}
+
+.image-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.image-actions a img {
+    cursor: pointer;
+    transition: opacity 0.3s;
+    background-color: white;
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
+}
+
+.image-actions a img:hover {
+    opacity: 0.8; 
+}
+
+.thumbnails-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon-btn-group {
+    display: flex;
+    gap: 10px; 
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.icon-btn img {
+    background-color: white; 
+    border-radius: 50%; 
+    padding: 5px; 
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
+    transition: opacity 0.3s;
+}
+
+.trick-name-overlay {
+    position: absolute;
+    bottom: 10px; 
+    left: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 5px 10px;
+    font-size: 3em; 
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.trick-name-input {
+    position: absolute;
+    bottom: 10px; 
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 3em;
+    font-weight: bold;
+    border-radius: 5px;
+    outline: none;
+}
+
+.trick-name-input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Placeholder en blanc semi-transparent */
+}
+
+.trick-name-input:focus {
+    background-color: rgba(0, 0, 0, 0.6); 
+    outline: 2px solid #fff;
+}
+
+.thumbnails-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    /* overflow-x: auto;  */
+}
+
+
+.trick-details {
+    margin: 20px;
+    text-align: center;
+}
+
+.media-thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.media-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.thumbnail-image, .thumbnail-video {
+    width: 150px; 
+    height: 100px;
+    object-fit: cover; 
+    border-radius: 5px;
+    border: 2px solid #ccc;
+}
+
+.description {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.description-container {
+    display: flex;
+    justify-content: center; /* Centre le conteneur */
+    margin: 10px 0;
+}
+
+.description-textarea {
+    width: 90%; 
+    height: 150px; 
+    padding: 10px; 
+    font-size: 1rem; 
+    resize: vertical; 
+}
+
+.trick-info {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.trick-info span {
+    display: flex;
+    align-items: center;
+}
+
+.trick-info select {
+    margin-left: 5px; 
+}
+

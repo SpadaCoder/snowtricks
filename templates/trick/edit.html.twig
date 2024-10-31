@@ -1,13 +1,117 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Trick{% endblock %}
+{% block title %}Edit Trick
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Trick</h1>
 
-    {{ include('trick/_form.html.twig', {'button_label': 'Update'}) }}
+	<h1>Edit Trick</h1>
 
-    <a href="{{ path('app_trick_index') }}">back to list</a>
+	{# {{ include('trick/_form.html.twig', {'button_label': 'Save'}) }} #}
 
-    {{ include('trick/_delete_form.html.twig') }}
-{% endblock %}
+	{# Formulaire principal pour le trick #}
+	{{ form_start(form) }}
+
+	<div
+		class="trick-container">
+
+		{# Image à la une #}
+		<div class="featured-image-container">
+
+			<img
+			src="{{ asset(featuredImage)}}" alt="Image à la une de {{ trick.name }}" width="600" class="featured-image">
+
+			{# Boutons #}
+			<div class="image-actions">
+				<a href="{{ path('app_trick_edit', {'slug': trick.slug}) }}"><img src="{{ asset('Images/edit-icon.png') }}" alt="Modifier" width="20" height="20"></a>
+				{# {{ include('trick/_delete_image_form.html.twig') }} #}
+			</div>
+
+
+			{# Champ de nom du trick #}
+				{{ form_widget(form.name, {'attr': {'class': 'trick-name-input'}}) }}
+		</div>
+
+		<div
+			class="trick-details">
+
+			{# Affiche les images et vidéos sous forme de miniatures #}
+			<div class="media-thumbnails">
+				{% for image in trick.images %}
+					<div class="media-container">
+						<img src="{{ asset('uploads/tricks/' ~ image.name) }}" alt="Miniature {{ loop.index }}" class="thumbnail-image">
+						<div class="icon-btn-group">
+							<form action="{{ path('app_image_edit', {'id': image.id}) }}" method="POST">
+								<input type="hidden" name="_token" value="{{ csrf_token('update' ~ image.id) }}">
+								<button type="submit" class="icon-btn">
+									<img src="{{ asset('images/edit-icon.png') }}" alt="Edit" style="width: 20px; height: 20px;">
+								</button>
+							</form>
+							<form action="{{ path('app_image_delete', {'id': image.id}) }}" method="POST">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
+								<button type="submit" class="icon-btn">
+									<img src="{{ asset('images/delete-icon.png') }}" alt="Delete" style="width: 20px; height: 20px;">
+								</button>
+							</form>
+						</div>
+					</div>
+				{% endfor %}
+
+				{% for video in trick.videos %}
+					<div class="media-container">
+						<iframe src="{{ video.name }}" class="thumbnail-video" allowfullscreen></iframe>
+						{# <div class="icon-btn-group">
+																							<form action="{{ path('app_video_edit', {'id': video.id}) }}" method="POST">
+																								<input type="hidden" name="_token" value="{{ csrf_token('update' ~ video.id) }}">
+																								<button type="submit" class="icon-btn">
+																									<img src="{{ asset('images/edit-icon.png') }}" alt="Edit" style="width: 20px; height: 20px;">
+																								</button>
+																							</form>
+																							<form action="{{ path('app_video_delete', {'id': image.id}) }}" method="POST">
+																								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+																								<button type="submit" class="icon-btn">
+																									<img src="{{ asset('images/delete-icon.png') }}" alt="Delete" style="width: 20px; height: 20px;">
+																								</button>
+																							</form>
+																						</div> #}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		{# Champ de description #}
+		<div class="description-container">
+			{{ form_row(form.description, {'attr': {'class': 'description-textarea'}}) }}
+		</div>
+
+		{# Détails en ligne en dessous : date de création, catégorie et date de modification #}
+		<div class="trick-info">
+			<span>Date de création :
+				{{ trick.created|date('d/m/Y') }}</span>
+			<span>Catégorie :
+				{{ form_row(form.category, {'label': false}) }}</span>
+			<span>Date de modification :
+				{{ trick.modified|date('d/m/Y') }}</span>
+		</div>
+
+		{# Bouton pour enregistrer les modifications #}
+		<button type="submit" class="btn">Enregistrer les modifications</button>
+		{{ form_end(form) }}
+
+		{# <h2>Vidéos associées</h2>
+													{% for video in trick.videos %}
+													    <div class="video-container">
+													        <p>Provider : {{ video.provider }}</p>
+													        <p>URL : {{ video.name }}</p>
+													        <form action="{{ path('app_video_delete', {'id': video.id}) }}" method="POST">
+													            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+													            <button type="submit">Supprimer</button>
+													        </form>
+													    </div>
+													{% endfor %} #}
+		<a href="{{ path('app_trick_index') }}">
+			back to list</a>
+
+		{{ include('trick/_delete_form.html.twig') }}
+
+	{% endblock %}
