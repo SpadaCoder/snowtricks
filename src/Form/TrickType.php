@@ -27,14 +27,12 @@ class TrickType extends AbstractType
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => TextType::class,
-                'entry_options' => ['label' => 'URL de la vidéo'],
+                'entry_options' => ['label' => 'URL'],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => 'Vidéos',
                 'mapped' => false,
                 'required' => false,
-                // 'prototype' => true,
-                // 'prototype_name' => '__name__',  // Utilisé pour le clonage
                 'data' => array_fill(0, 3, null), // Préparer 3 champs par défaut pour les vidéos
             ])
 

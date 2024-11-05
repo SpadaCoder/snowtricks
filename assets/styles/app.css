@@ -1,5 +1,5 @@
 body {
-    background-color: skyblue;
+    background-color: #FFFFFF;
     padding: 10px 50px 10px 50px;
 }
 
@@ -64,6 +64,10 @@ body {
     transition: opacity 0.3s;
 }
 
+.trick-name-container h1 {
+    display: none;
+}
+
 .trick-name-overlay {
     position: absolute;
     bottom: 10px; 
@@ -110,6 +114,26 @@ body {
 .trick-details {
     margin: 20px;
     text-align: center;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #A9DFF7;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container .form-input,
+.form-container .form-select,
+.form-container .description-textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
 }
 
 .media-thumbnails {
@@ -174,3 +198,66 @@ body {
     margin-left: 5px; 
 }
 
+.media-section {
+    background-color: #A9DFF7;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.media-group {
+    margin-bottom: 15px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+nav {
+    background-color:#A9DFF7;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+nav ul li a {
+    color: navy;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 20px; 
+    color:#333333;
+}

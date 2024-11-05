@@ -4,12 +4,15 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Trick</h1>
+
 	<div class="featured-image-container">
 
         <img src="{{ asset(featuredImage)}}" alt="Image à la une de {{ trick.name }}" width="600" class="featured-image"> 
 
+			<div class="trick-name-container">
+                <h1 aria-hidden="true">{{ trick.name }}</h1>
 		<div class="trick-name-overlay">{{ trick.name }}</div>
+        </div>
 
 		<div class="image-actions">
 <a href="{{ path('app_trick_edit', {'slug': trick.slug}) }}"><img src="{{ asset('Images/edit-icon.png') }}" alt="Modifier" width="20" height="20"></a>

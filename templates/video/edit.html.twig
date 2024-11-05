@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la vidéo{% endblock %}
+
+{% block body %}
+    <h1>Modifier la vidéo</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.save) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_trick_edit', {'slug': video.trick.slug}) }}" class="btn btn-secondary">Retour</a>
+{% endblock %}

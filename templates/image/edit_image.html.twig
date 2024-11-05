@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'image{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'image</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.imageFile) }}
+    <button type="submit">Mettre à jour l'image</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_trick_edit', { 'slug': image.trick.slug }) }}">Retour à l'édition du Trick</a>
+{% endblock %}

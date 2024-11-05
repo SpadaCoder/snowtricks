@@ -4,19 +4,24 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Service\ImageServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
 
 class ImageController extends AbstractController
 {
     private ImageServiceInterface $imageService;
 
-    public function __construct(ImageServiceInterface $imageService)
+    public function __construct(
+        ImageServiceInterface $imageService,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager
+         )
     {
         $this->imageService = $imageService;
     }
@@ -29,19 +34,32 @@ class ImageController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_image_delete', methods: ['POST'])]
-    public function deleteImage(Request $request, Image $image, EntityManagerInterface $entityManager): RedirectResponse
-    {
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($image);
-            $entityManager->flush();
-            $this->imageService->deleteImage($image);
-            $this->addFlash('success', 'L\'image a été supprimée.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
+    #[Route('/image/confirm-delete/{id}', name: 'app_image_confirm_delete', methods: ['GET'])]
+public function confirmDelete(Image $image, CsrfTokenManagerInterface $csrfTokenManager): Response
+{
+    $csrfToken = $csrfTokenManager->getToken('delete' . $image->getId())->getValue();
 
-        return $this->redirectToRoute('app_trick_edit', ['slug' => $image->getTrick()->getSlug()]);
+    return $this->render('image/confirm_delete.html.twig', [
+        'image' => $image,
+        'csrf_token' => $csrfToken,
+    ]);
+}
+
+    #[Route('/image/delete/{id}', name: 'app_image_delete', methods: ['POST'])]
+    public function deleteImage(Request $request, Image $image, CsrfTokenManagerInterface $csrfTokenManager): RedirectResponse
+    {
+// Récupérer le slug de l'image ou de son trick
+$slug = $image->getTrick()->getSlug(); 
+
+// Validation du token CSRF
+if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $image->getId(), $request->request->get('_token')))) {
+    $this->imageService->deleteImage($image);
+    $this->addFlash('success', 'L\'image a été supprimée.');
+} else {
+    $this->addFlash('error', 'Token CSRF invalide.');
+}
+
+        return $this->redirectToRoute('app_trick_edit', ['slug' => $slug]);
     }
 
     #[Route('/edit/{id}', name: 'app_image_edit', methods: ['POST', 'GET'])]
