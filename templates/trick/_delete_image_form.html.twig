@@ -1,4 +1,5 @@
-<form method="post" action="{{ path('app_image_delete', {'id':image.id})}}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
-    <button class="btn">Delete</button>
+{{dump(trick.images[0].id)}}
+<form method="post" action="{{ path('app_image_delete', {'id':trick.images[0].id})}}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.images[0].id) }}">
+    <button class="btn">Delete ({{trick.images[0].id}})</button>
 </form>

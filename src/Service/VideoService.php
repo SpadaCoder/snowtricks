@@ -108,4 +108,23 @@ class VideoService implements VideoServiceInterface
         return null;
     }
 
+    public function editVideo(Video $video, string $newUrl): void
+{
+    // Convertir l'URL en URL d'intégration (embed) et définir le fournisseur
+    $embedUrl = $this->convertToEmbedUrl($newUrl);
+    $provider = $this->getProviderFromUrl($newUrl);
+
+    if ($embedUrl && $provider) {
+        $video->setName($embedUrl);
+        $video->setProvider($provider);
+
+        // Persister les modifications
+        $this->entityManager->persist($video);
+        $this->entityManager->flush();
+    } else {
+        throw new \InvalidArgumentException('URL de vidéo non reconnue.');
+    }
+
+}
+
 }

@@ -19,5 +19,10 @@ interface VideoServiceInterface
      * @return string|null L'URL d'intégration ou null si le format n'est pas reconnu.
      */
     public function convertToEmbedUrl(string $url): ?string;
+
+// TO do
+
+    public function editVideo(Video $video, string $newUrl): void;
+
 }
 

@@ -1,36 +1,39 @@
 {{ form_start(form, { 'attr': {'enctype': 'multipart/form-data'}, 'method': 'POST' }) }}
-    {# {{ form_widget(form) }} #}
 
-    {# Si le Trick a un ID, on affiche le formulaire pour les vidéos #}
-    {# {% if trick.id %} #}
-        {# {% include 'video/add.html.twig' %} #}
-    {# {% endif %} #}
+<div class="form-container">
+    {{ form_row(form.name, {'attr': {'class': 'form-input'}}) }}
+    {{ form_row(form.description, {'attr': {'class': 'description-textarea'}}) }}
+    {{ form_row(form.category, {'attr': {'class': 'form-select'}}) }}
 
-    {{ form_row(form.name) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.category) }}
+<div id="video-collection">
+	<h3>{{ form.videos.vars.label }}</h3>
+	{% for video in form.videos %}
+		<div class="video">
+			{{ form_row(video) }}
+			<button type="button" class="remove-video">Supprimer</button>
+		</div>
+	{% endfor %}
+</div>
 
-    <div id="video-collection">
-        <h3>{{ form.videos.vars.label }}</h3>
-        {% for video in form.videos %}
-            <div class="video">
-                {{ form_row(video) }}
-                <button type="button" class="remove-video">Supprimer</button>
-            </div>
-        {% endfor %}
-    </div>
-
-    {# <button type="button" class="add-video">Ajouter une vidéo</button> #}
-    
-    {{ form_row(form.images) }}
-
-
+{# Section pour ajouter des images #}
+<div class="media-group">
+	<h3>Images</h3>
+	{{ form_row(form.images, {
+            'label': false,
+            'attr': {'class': 'form-control', 'placeholder': 'Télécharger des images'}
+        }) }}
+</div>
 
 
 {% if isEdit %}
+
 	<button type="submit">Mettre à jour le trick</button>
 {% else %}
-	<button type="submit">Créer le trick</button>
-{% endif %}
+	<div class="action-buttons">
+		<button type="submit" class="btn btn-primary">
+			<i class="fas fa-save"></i>
+			Enregistrer</button>
+	{% endif %}
+</div>
 
-{{ form_end(form) }}
+	{{ form_end(form) }}

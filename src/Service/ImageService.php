@@ -61,9 +61,6 @@ class ImageService implements ImageServiceInterface
 
     public function replaceImage(Image $image, UploadedFile $newImageFile): void
     {
-        // Supprimer l'ancienne image
-        $this->deleteImage($image);
-
         // Uploader la nouvelle image
         $fileName = md5(uniqid()) . '.' . $newImageFile->guessExtension();
         $newImageFile->move($this->imagesDirectory, $fileName);
@@ -85,10 +82,10 @@ class ImageService implements ImageServiceInterface
     }
 
     public function getFeaturedImageOrDefault($trick): string
-{
-    // Récupérer la première image pour un trick
-    $featuredImage = $this->getFirstImageByTrick($trick);
+    {
+        // Récupérer la première image pour un trick
+        $featuredImage = $this->getFirstImageByTrick($trick);
 
-    return $featuredImage ? 'uploads/tricks/' . $featuredImage->getName() : 'images/default-image.png';
-}
+        return $featuredImage ? 'uploads/tricks/' . $featuredImage->getName() : 'images/default-image.png';
+    }
 }
