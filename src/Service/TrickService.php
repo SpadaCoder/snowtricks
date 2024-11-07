@@ -88,10 +88,7 @@ class TrickService implements TrickServiceInterface
         $videoUrls = $form->get('videos')->getData();
         foreach ($videoUrls as $videoUrl) {
             if (null !== $videoUrl) {
-                dump($videoUrl);
                 $video = $this->videoService->create($videoUrl);
-                dump($video);
-
 
                 // Ajout de l'image uniquement si elle est bien créée
                 $trick->addVideo($video);

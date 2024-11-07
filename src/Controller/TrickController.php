@@ -10,7 +10,6 @@ use App\Service\TrickServiceInterface;
 use App\Service\ImageServiceInterface;
 use App\Repository\TrickRepository;
 use App\Service\VideoServiceInterface;
-use Doctrine\ORM\Cache\Persister\Collection\ReadOnlyCachedCollectionPersister;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -20,6 +19,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Entity\Comment;
+use App\Repository\CommentRepository;
+use App\Form\CommentType;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -29,8 +31,8 @@ class TrickController extends AbstractController
         private readonly TrickServiceInterface $trickService,
         private readonly ImageServiceInterface $imageService,
         private readonly EntityManagerInterface $entityManagerInterface,
-        private readonly VideoServiceInterface $videoService
-
+        private readonly VideoServiceInterface $videoService,
+        private readonly CommentRepository $commentRepository
     ) {
     }
 
@@ -73,12 +75,45 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_trick_show', methods: ['GET'])]
-    public function show(Trick $trick): Response
+    #[Route('/{slug}', name: 'app_trick_show', methods: ['GET', 'POST'])]
+    public function show(Trick $trick, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1); // Récupère le numéro de la page, par défaut 1
+        $limit = 10; // Nombre de commentaires par page
+        $offset = ($page - 1) * $limit; // Calcul de l'offset pour la requête
+
+        // Récupérer tous les commentaires pour le trick donné
+        $comments = $this->commentRepository->findBy(['trick' => $trick], ['created' => 'DESC'], $limit, $offset);
+
+        // Compter le total de commentaires pour calculer le nombre de pages
+        $totalComments = count($this->commentRepository->findBy(['trick' => $trick]));
+        $totalPages = ceil($totalComments / $limit); // Calculer le nombre total de pages
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        // if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
+            $comment->setCreated(new \DateTimeImmutable());
+            $comment->setModified(new \DateTimeImmutable());
+
+            $this->entityManagerInterface->persist($comment);
+            $this->entityManagerInterface->flush();
+
+            return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
+        }
+        // }
+
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'featuredImage' => $this->trickService->getFeaturedImageOrDefault($trick)
+            'featuredImage' => $this->trickService->getFeaturedImageOrDefault($trick),
+            'comments' => $comments,
+            'form' => $form->createView(),
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
         ]);
     }
 
