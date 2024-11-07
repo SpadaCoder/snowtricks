@@ -1,0 +1,44 @@
+<h2>Commentaires</h2>
+
+{% if comments is empty %}
+	<p>Aucun commentaire pour ce trick.</p>
+{% else %}
+	{% for comment in comments %}
+		<div class="comment">
+			<div class="comment-header">
+				<img src="{{ asset('uploads/profils/' ~ comment.user.profilPicture) }}" alt="{{ comment.user.username }}" class="profil-icon">
+				<div class="user-info">
+					<span class="user-name">
+						<strong>{{ comment.user.username }}</strong>
+					</span>
+					<span class="comment-date">{{ comment.created|date('d/m/Y H:i') }}</span>
+				</div>
+			</div>
+
+            {# Contenu du commentaire #}
+			<p>{{ comment.text }}</p>
+
+		</div>
+	{% endfor %}
+
+	<div class="pagination">
+		{% if currentPage > 1 %}
+			<a href="{{ path('app_trick_show', {'slug': trick.slug, 'page': currentPage - 1}) }}">Précédent</a>
+		{% endif %}
+		{% if currentPage < totalPages %}
+			<a href="{{ path('app_trick_show', {'slug': trick.slug, 'page': currentPage + 1}) }}">Suivant</a>
+		{% endif %}
+	</div>
+{% endif %}
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+	{{ form_start(form) }}
+	<div class="form-group">
+		{{ form_row(form.text, {'attr': {'class': 'comment-input', 'placeholder': 'Écrivez votre commentaire ici...'}}) }}
+	</div>
+	<button type="submit" class="btn-submit">Envoyer</button>
+	{{ form_end(form) }}
+{% else %}
+	<p>Pour commenter,
+		<a href="{{ path('app_login') }}">connectez-vous</a>.</p>
+{% endif %}

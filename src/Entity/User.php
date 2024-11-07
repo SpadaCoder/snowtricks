@@ -70,13 +70,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comment;
 
     #[ORM\Column(length: 255)]
-    private ?string $avatar = null;
+    private ?string $profilPicture = null;
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->trick = new ArrayCollection();
         $this->comment = new ArrayCollection();
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int
@@ -304,14 +305,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAvatar(): ?string
+    public function getProfilPicture(): ?string
     {
-        return $this->avatar;
+        return $this->profilPicture;
     }
 
-    public function setAvatar(string $avatar): static
+    public function setProfilPicture(string $profilPicture): static
     {
-        $this->avatar = $avatar;
+        $this->profilPicture = $profilPicture;
 
         return $this;
     }

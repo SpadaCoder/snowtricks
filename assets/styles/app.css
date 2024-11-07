@@ -261,3 +261,76 @@ footer {
     padding: 20px; 
     color:#333333;
 }
+
+/* Container du formulaire */
+.comment-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour les champs de saisie */
+.comment-form .form-group {
+    margin-bottom: 15px;
+}
+
+.comment-form label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/*Formulaire Comment*/
+.comment-form .comment-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical; /* Autorise le redimensionnement vertical pour les commentaires */
+}
+
+/* Style pour le bouton d'envoi */
+.btn-submit {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.comment-header {
+    display: flex;             
+    align-items: center;       
+    margin-bottom: 10px;       
+}
+
+.profil-icon {
+    width: 24px;  
+    height: 24px;
+    border-radius: 50%; 
+    margin-right: 8px; 
+    object-fit: cover; 
+    vertical-align: middle;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.comment-date {
+    color: #777;            
+    font-size: 0.9em;          
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
