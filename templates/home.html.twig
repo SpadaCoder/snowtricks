@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks - Accueil
+{% endblock %}
+
+{% block body %}
+	<h1 class="hero-title">Bienvenue sur SnowTricks !</h1>
+	<section class="hero-section" style="background-image: url('{{ asset('images/Snowtricks.jpg') }}');">
+		<div class="hero-overlay">
+
+			<p class="hero-subtitle">Découvrez, apprenez et partagez les meilleures figures de freestyle.</p>
+		</div>
+		<!-- Flèche de défilement vers la liste des tricks -->
+		<a href="#tricks-list" class="scroll-down">⬇️</a>
+	</section>
+
+	<!-- Section Liste des tricks -->
+	<section id="tricks-list">
+		<h2>Découvrez nos Tricks</h2>
+		<div class="tricks-container">
+			{% for trickWithImage in tricks %}
+				<div class="trick-item">
+					<a
+						href="{{ path('app_trick_show', {'slug': trickWithImage.trick.slug}) }}">
+						<!-- Image en miniature -->
+						<div class="trick-image" style="background-image: url('{{ asset(trickWithImage.featuredImage) }}');"></div>
+
+						<!-- Nom du trick dans un bandeau -->
+							<span class="trick-name">{{ trickWithImage.trick.name }}</span>
+					</a>
+					<!-- Boutons Modification et Suppression si utilisateur a le rôle requis -->
+					{% if is_granted('ROLE_ADMIN') %}
+						<div class="icon-btn">
+							<a href="{{ path('app_trick_edit', {'slug': trickWithImage.trick.slug}) }}">
+								<img src="{{ asset('Images/edit-icon.png') }}" alt="Edit" width="20" height="20">
+							</a>
+							{{ include('trick/_delete_form.html.twig', {'trick': trickWithImage.trick}) }}
+						</div>
+					{% endif %}
+				</div>
+			{% else %}
+				<p>Aucun trick pour le moment.</p>
+			{% endfor %}
+		</div>
+	</section>
+
+{% endblock %}

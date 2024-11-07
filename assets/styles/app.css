@@ -42,23 +42,19 @@ body {
     margin-bottom: 20px;
 }
 
-.icon-btn-group {
-    display: flex;
-    gap: 10px; 
-    justify-content: center;
-    margin-top: 5px;
-}
-
 .icon-btn {
+    display: flex;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
+    justify-content: center;
 }
 
 .icon-btn img {
     background-color: white; 
     border-radius: 50%; 
+    margin: 0 5px;
     padding: 5px; 
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
     transition: opacity 0.3s;
@@ -334,3 +330,106 @@ footer {
 .btn-submit:hover {
     background-color: #0056b3;
 }
+
+
+/* Home */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+}
+
+/* Flèche vers la liste des tricks */
+.scroll-down {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 2rem;
+    color: white;
+    text-decoration: none;
+}
+
+.scroll-down:hover {
+    color: #ccc;
+    cursor: pointer;
+}
+
+/* Styles pour la liste des tricks */
+.tricks-container {
+    display: grid;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.trick-item {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image miniature avec background-cover */
+.trick-image {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Bandeau pour le nom du trick */
+.trick-name {
+    display: block;
+    background-color: #333;
+    color: white;
+    padding: 0.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.trick-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Boutons Modification et Suppression */
+.trick-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem;
+    margin-top: auto;
+}
+
+
