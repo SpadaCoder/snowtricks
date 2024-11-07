@@ -10,7 +10,7 @@ use App\Entity\User;
 use App\Service\TrickServiceInterface;
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
-use App\Entity\Video;
+
 
 /**
  * Service pour la gestion des entités Trick.
