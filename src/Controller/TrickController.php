@@ -36,15 +36,6 @@ class TrickController extends AbstractController
     ) {
     }
 
-
-    #[Route('/', name: 'app_trick_index', methods: ['GET'])]
-    public function index(TrickRepository $trickRepository): Response
-    {
-        return $this->render('trick/index.html.twig', [
-            'tricks' => $trickRepository->findAll(),
-        ]);
-    }
-
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ImageServiceInterface $imageService, EntityManagerInterface $entityManager, TrickRepository $trickRepository, string $slug = null): Response
     {
@@ -137,7 +128,7 @@ class TrickController extends AbstractController
             // Appeler le service Trick pour gérer la mise à jour du trick et l'upload des nouvelles images
             $this->trickService->update($trick, $form, $user);
 
-            return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 // dd($trick);
         return $this->render('trick/edit.html.twig', [
@@ -156,7 +147,7 @@ class TrickController extends AbstractController
             $this->trickService->delete($trick);
         }
 
-        return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/image/delete/{id}', name: 'app_trick_delete_image', methods: ['POST'])]
