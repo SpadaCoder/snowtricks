@@ -1,7 +1,7 @@
 <nav>
     <ul>
         <li><a href="{{ path('app_home') }}">Home</a></li>
-        <li><a href="{{ path('app_trick_index') }}">Tricks</a></li>
+        {# <li><a href="{{ path('app_trick_index') }}">Tricks</a></li> #}
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>

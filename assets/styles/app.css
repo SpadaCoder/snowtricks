@@ -433,3 +433,38 @@ footer {
 }
 
 
+/* Login */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.login-form label,
+.login-form input,
+.login-form .forgot-password,
+.login-form .submit-button {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.login-form .forgot-password {
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+.checkbox {
+    margin: 5px;
+}
+
+.checkbox label {
+    display: inline-flex;
+    white-space: nowrap;
+}
+
+.checkbox input[type="checkbox"] {
+    margin-right: 5px; 
+}

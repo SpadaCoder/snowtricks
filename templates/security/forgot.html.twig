@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oubli de mot de passe
+{% endblock %}
+
+{% block body %}
+	<div class="forgot-password-container">
+		<h1>Oubli de mot de passe?</h1>
+
+		<p>Entrez votre adresse email pour réinitialiser votre mot de passe.</p>
+
+		<form
+			method="POST">
+			{# CSRF Token for security #}
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('forgot_password') }}"/>
+
+			<div class="form-group">
+				<label for="inputEmail">Adresse Email</label>
+				<input type="email" name="email" id="inputEmail" class="form-control" required placeholder="Entrer votre email"/>
+			</div>
+
+			<button type="submit" class="btn btn-primary">Réinitialiser mon mot de passe</button>
+		</form>
+
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="alert alert-{{ label }}">{{ message }}</div>
+			{% endfor %}
+		{% endfor %}
+
+		<div class="back-to-login">
+			<a href="{{ path('app_login') }}">Retour à la connexion</a>
+		</div>
+	</div>
+{% endblock %}
