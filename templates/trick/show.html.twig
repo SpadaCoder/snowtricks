@@ -14,10 +14,12 @@
 			<div class="trick-name-overlay">{{ trick.name }}</div>
 		</div>
 
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 		<div class="image-actions">
 			<a href="{{ path('app_trick_edit', {'slug': trick.slug}) }}"><img src="{{ asset('Images/edit-icon.png') }}" alt="Modifier" width="20" height="20"></a>
 			{{ include('trick/_delete_form.html.twig') }}
 		</div>
+		{% endif %}
 	</div>
 
 	<div

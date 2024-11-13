@@ -61,6 +61,12 @@ class ImageService implements ImageServiceInterface
 
     public function replaceImage(Image $image, UploadedFile $newImageFile): void
     {
+        // Vérifier si l'ancien fichier existe et le supprimer
+        $oldFilePath = $this->imagesDirectory . '/' . $image->getName();
+        if (file_exists($oldFilePath)) {
+            $this->deleteFile($oldFilePath);  // Supprimer l'ancien fichier
+        }
+
         // Uploader la nouvelle image
         $fileName = md5(uniqid()) . '.' . $newImageFile->guessExtension();
         $newImageFile->move($this->imagesDirectory, $fileName);

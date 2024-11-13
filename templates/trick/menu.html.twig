@@ -1,4 +1,4 @@
-<nav>
+<nav class="menu">
     <ul>
         <li><a href="{{ path('app_home') }}">Home</a></li>
         {# <li><a href="{{ path('app_trick_index') }}">Tricks</a></li> #}
@@ -10,5 +10,16 @@
         {% endif %}
 
         <li><a href="{{ path('app_register') }}">S'enregistrer</a></li>
+    </ul>
+</nav>
+
+    <nav class="bottom-nav">
+    <ul>
+        <li><a href="{{ path('app_home') }}"><img src="{{ asset('images/home-icon.png') }}" class="icon-home"></a></li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <li><a href="{{ path('app_logout') }}"><img src="{{ asset('images/logout-icon.png') }}" class="icon-logout"></a></li>
+        {% else %}
+            <li><a href="{{ path('app_login') }}"><img src="{{ asset('images/login-icon.png') }}" class="icon-login"></a></li>
+        {% endif %}
     </ul>
 </nav>

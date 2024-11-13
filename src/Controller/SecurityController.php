@@ -61,7 +61,7 @@ class SecurityController extends AbstractController
              }
         }
 
-        return $this->render('password/forgot.html.twig', [
+        return $this->render('security/forgot.html.twig', [
             'form' => $form->createView(),
         ]);
     }

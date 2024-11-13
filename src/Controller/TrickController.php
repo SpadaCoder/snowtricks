@@ -37,6 +37,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function new(Request $request, ImageServiceInterface $imageService, EntityManagerInterface $entityManager, TrickRepository $trickRepository, string $slug = null): Response
     {
         // Soit créer un nouveau Trick, soit récupérer celui qui correspond au slug
@@ -46,15 +47,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Associer l'utilisateur authentifié au trick.
-            $userId = 1; //TO DO
-            //$user = $this->getUser(); //TO DO
-            $user = $entityManager->getRepository(User::class)->find($userId);
-
-
-
             // Appeler le service Trick pour gérer la création du trick et l'upload des images
-            $this->trickService->create($trick, $form, $user);
+            $this->trickService->create($trick, $form, $this->getUser());
 
             return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
         }
@@ -82,7 +76,7 @@ class TrickController extends AbstractController
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
 
-        // if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTrick($trick);
@@ -95,7 +89,7 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
         }
-        // }
+        }
 
 
         return $this->render('trick/show.html.twig', [
@@ -109,7 +103,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function edit(Request $request, Trick $trick, EntityManagerInterface $entityManager, VideoServiceInterface $videoService): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
@@ -121,16 +115,12 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Associer l'utilisateur authentifié au trick.
-            $userId = 1; //TO DO
-            //$user = $this->getUser(); //TO DO
-            $user = $entityManager->getRepository(User::class)->find($userId);
+            $user = $this->getUser(); 
 
             // Appeler le service Trick pour gérer la mise à jour du trick et l'upload des nouvelles images
             $this->trickService->update($trick, $form, $user);
-
-            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
-// dd($trick);
+
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
             'form' => $form,
@@ -140,6 +130,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'app_trick_delete', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function delete(Request $request, Trick $trick, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->getPayload()->getString('_token'))) {
@@ -151,6 +142,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/image/delete/{id}', name: 'app_trick_delete_image', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function deleteImage(Request $request, Image $image, EntityManagerInterface $entityManager): RedirectResponse
     {
         // Vérification du token CSRF
@@ -172,6 +164,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/image/edit/{id}', name: 'app_trick_edit_image', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editImage(Request $request, Image $image, ImageServiceInterface $imageService): Response
     {
         // Création d'un formulaire pour l'upload d'une nouvelle image
