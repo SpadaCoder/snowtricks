@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,20 +12,20 @@ class HomeController extends AbstractController
 {
     public function __construct(TrickServiceInterface $trickService)
     {
-        $this->trickServiceInterface = $trickService;
+        $this->trickService = $trickService;
     }
 
     #[Route(path: '/', name: 'app_home')]
-    public function index(TrickRepository $trickRepository, TrickServiceInterface $trickService): Response
+    public function index(): Response
     {
         // Récupère les tricks depuis la base de données
-        $tricks = $trickRepository->findAll();
+        $tricks = $this->trickService->findAll();
         $tricksWithImages = [];
 
         foreach ($tricks as $trick) {
             $tricksWithImages[] = [
                 'trick' => $trick,
-                'featuredImage' => $this->trickServiceInterface->getFeaturedImageOrDefault($trick),
+                'featuredImage' => $this->trickService->getFeaturedImageOrDefault($trick),
             ];
         }
 

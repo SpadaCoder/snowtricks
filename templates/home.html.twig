@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="hero-title">Bienvenue sur SnowTricks !</h1>
+<section class="full-screen-section">
+	<h1 class="hero-title">SnowTricks</h1>
 	<section class="hero-section" style="background-image: url('{{ asset('images/Snowtricks.jpg') }}');">
 		<div class="hero-overlay">
 
@@ -13,10 +14,21 @@
 		<!-- Flèche de défilement vers la liste des tricks -->
 		<a href="#tricks-list" class="scroll-down">⬇️</a>
 	</section>
+	</section>
 
 	<!-- Section Liste des tricks -->
 	<section id="tricks-list">
-		<h2>Découvrez nos Tricks</h2>
+		<div class="title-with-button">
+			<h2>Découvrez nos Tricks</h2>
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<!-- Ajout de trick -->
+			<a href="{{ path('app_trick_new') }}">
+				<img src="{{ asset('Images/addition-icon.png') }}" alt="Add Trick" class="add-trick-image">
+			</a>
+			{% endif %}
+		</div>
+
 		<div class="tricks-container">
 			{% for trickWithImage in tricks %}
 				<div class="trick-item">
@@ -26,10 +38,10 @@
 						<div class="trick-image" style="background-image: url('{{ asset(trickWithImage.featuredImage) }}');"></div>
 
 						<!-- Nom du trick dans un bandeau -->
-							<span class="trick-name">{{ trickWithImage.trick.name }}</span>
+						<span class="trick-name">{{ trickWithImage.trick.name }}</span>
 					</a>
 					<!-- Boutons Modification et Suppression si utilisateur a le rôle requis -->
-					{% if is_granted('ROLE_ADMIN') %}
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<div class="icon-btn">
 							<a href="{{ path('app_trick_edit', {'slug': trickWithImage.trick.slug}) }}">
 								<img src="{{ asset('Images/edit-icon.png') }}" alt="Edit" width="20" height="20">

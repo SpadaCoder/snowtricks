@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Doctrine\Common\Collections\Collection;
+use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\Image;
@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Service\TrickServiceInterface;
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
+
 
 
 /**
@@ -32,7 +33,8 @@ class TrickService implements TrickServiceInterface
         private readonly SluggerInterface $slugger,
         private readonly CreatedDateService $createdDateService,
         private readonly ModifiedDateService $modifiedDateService,
-        private readonly VideoServiceInterface $videoService
+        private readonly VideoServiceInterface $videoService,
+        private readonly TrickRepository $trickRepository
     ) {
     }
 
@@ -178,5 +180,10 @@ class TrickService implements TrickServiceInterface
         return $this->imageService->getFeaturedImageOrDefault($trick);
     }
 
+
+    public function findAll()
+    {
+        return $this->trickRepository->findAll();
+    }
 
 }
