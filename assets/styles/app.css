@@ -138,6 +138,7 @@ body {
     margin-bottom: 15px;
     flex-wrap: wrap;
     justify-content: center;
+    visibility: visible;
 }
 
 .media-container {
@@ -226,6 +227,22 @@ body {
 h2, h3 {
     color: #333;
 }
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+.popup button {
+    margin-top: 10px;
+}
+
 
 /* Barre de navigation mobile */
 .bottom-nav {
@@ -485,129 +502,3 @@ display: none;
     margin-right: 5px; 
 }
 
-/* Adapter les marges et le padding général pour les petits écrans */
-@media (max-width: 600px) {
-    body {
-        padding: 5px;
-    }
-
-    /* Featured image container and actions */
-    .featured-image-container {
-        text-align: center;
-    }
-
-    .image-actions {
-        top: 5px;
-        right: 5px;
-        gap: 5px;
-    }
-
-    .trick-name-overlay,
-    .trick-name-input {
-        font-size: 1.5em; /* Réduit la taille du texte */
-    }
-
-    /* Thumbnails and media */
-    .thumbnails-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-    }
-
-    /* Form container */
-    .form-container {
-        max-width: 100%; /* Utiliser toute la largeur */
-        padding: 15px;
-    }
-
-    /* Tricks container for grid display */
-    .tricks-container {
-        grid-template-columns: repeat(1, 1fr); 
-        gap: 5px;
-    }
-
-    /* Trick items */
-    .trick-item {
-        width: 100%; /* Prend toute la largeur disponible */
-        margin-bottom: 10px;
-    }
-
-    /* Boutons d’action pour les tricks */
-    .trick-actions {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    /* Taille des images et actions */
-    .icon-btn img,
-    .add-trick-image {
-        width: 30px;
-        height: 30px;
-    }
-
-    /* Réduction des paddings et marges pour le formulaire de commentaire */
-    .comment-form {
-        padding: 10px;
-    }
-
-    .comment-form .comment-input {
-        font-size: 0.9em;
-        padding: 8px;
-    }
-
-    /* Hero section for homepage */
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-    
-    /* Boutons */
-    .btn-submit,
-    .btn-primary {
-        font-size: 0.9rem;
-        padding: 8px 15px;
-    }
-
-    .menu {
-        display: none;
-    }
-
-    /* Navbar */
-    nav ul li {
-        display: block; /* Aligne chaque lien sur une ligne */
-        margin-bottom: 10px;
-    }
-
-/* Apparition et style pour les petits écrans */
-.bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background-color: #333; /* Couleur de fond */
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-    box-sizing: border-box;
-}
-
-.bottom-nav ul {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.bottom-nav img {
-    width: 30px;
-}
-
-}

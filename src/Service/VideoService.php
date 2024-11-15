@@ -50,10 +50,15 @@ class VideoService implements VideoServiceInterface
     }
 
     // Supprime une vidéo
-    public function removeVideo(Video $video): void
+    public function removeVideo(Video $video): Trick
     {
+        // Récupérer le Trick associé à la vidéo
+        $trick = $video->getTrick();
         $this->entityManager->remove($video);
         $this->entityManager->flush();
+
+        // Retourner le Trick
+        return $trick;
     }
 
     // Récupère le fournisseur de la vidéo à partir de l'URL
@@ -109,22 +114,22 @@ class VideoService implements VideoServiceInterface
     }
 
     public function editVideo(Video $video, string $newUrl): void
-{
-    // Convertir l'URL en URL d'intégration (embed) et définir le fournisseur
-    $embedUrl = $this->convertToEmbedUrl($newUrl);
-    $provider = $this->getProviderFromUrl($newUrl);
+    {
+        // Convertir l'URL en URL d'intégration (embed) et définir le fournisseur
+        $embedUrl = $this->convertToEmbedUrl($newUrl);
+        $provider = $this->getProviderFromUrl($newUrl);
 
-    if ($embedUrl && $provider) {
-        $video->setName($embedUrl);
-        $video->setProvider($provider);
+        if ($embedUrl && $provider) {
+            $video->setName($embedUrl);
+            $video->setProvider($provider);
 
-        // Persister les modifications
-        $this->entityManager->persist($video);
-        $this->entityManager->flush();
-    } else {
-        throw new \InvalidArgumentException('URL de vidéo non reconnue.');
+            // Persister les modifications
+            $this->entityManager->persist($video);
+            $this->entityManager->flush();
+        } else {
+            throw new \InvalidArgumentException('URL de vidéo non reconnue.');
+        }
+
     }
-
-}
 
 }

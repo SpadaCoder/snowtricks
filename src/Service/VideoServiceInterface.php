@@ -9,7 +9,7 @@ interface VideoServiceInterface
 {
     public function addVideo(string $url, string $provider, Trick $trick): Video;
     public function create(string $url): Video;
-    public function removeVideo(Video $video): void;
+    public function removeVideo(Video $video): Trick;
     public function getProviderFromUrl(string $url): ?string;
 
     /**

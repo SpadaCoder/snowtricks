@@ -16,10 +16,10 @@
 			{% block body %}{% endblock %}
 
 			{% block javascripts %}
-				<script src="{{ asset('js/form.js') }}"></script>
 				{% block importmap %}
 					{{ importmap('app') }}
 				{% endblock %}
+				<script src="{{ asset('js/toggle-media.js') }}"></script>
 			{% endblock %}
 
 			<footer>

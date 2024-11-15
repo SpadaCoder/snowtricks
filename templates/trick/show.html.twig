@@ -24,9 +24,13 @@
 
 	<div
 		class="trick-details">
+        {# Affiche le bouton pour afficher/masquer les médias #}
+        <div class="media-toggle">
+            <button id="toggle-media-btn" class="btn btn-primary d-block d-md-none">Voir les médias</button>
+        </div>
 
 		{# Affiche les images et vidéos sous forme de miniatures #}
-		<div class="media-thumbnails">
+        <div id="media-thumbnails" class="media-thumbnails" >
 			<div class="images">
 				{% for image in trick.images %}
 					<img src="{{ asset('uploads/tricks/' ~ image.name) }}" alt="Miniature {{ loop.index }}" class="thumbnail-image">
@@ -64,4 +68,4 @@
 
 </tbody>
 
-	{% endblock %}
+{% endblock %}

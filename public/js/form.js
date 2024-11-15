@@ -20,3 +20,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+function closePopup() {
+    // Cacher l'élément pop-up
+    const popup = document.getElementById("popup-success");
+    if (popup) {
+        popup.style.display = "none";
+    }
+
+}
