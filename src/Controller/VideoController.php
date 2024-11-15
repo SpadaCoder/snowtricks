@@ -3,16 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Video;
-use App\Entity\Trick;
 use App\Service\VideoServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Form\VideoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\TrickRepository;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/video')]
 class VideoController extends AbstractController
@@ -27,54 +25,41 @@ class VideoController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'app_video_delete', methods: ['POST'])]
-    public function delete(Video $video): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function delete(Video $video, Request $request): Response
     {
-        //autorisation
-        $this->videoService->removeVideo($video);
-        $this->addFlash('success', 'Vidéo supprimée.');
         
-        return $this->redirectToRoute('app_trick_edit', ['slug' => $video->getTrick()->getSlug()]);
+        $trick = $this->videoService->removeVideo($video);
+        dd($trick);
+
+        return $this->redirectToRoute('app_trick_edit', ['slug' => $trick->getSlug()]);
     }
-    
+
     #[Route('/edit/{id}', name: 'app_video_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function edit(Request $request, Video $video): Response
     {
-        //autorisation
+        // Création du formulaire d'édition de l'URL
+        $form = $this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
 
-         // Création du formulaire d'édition de l'URL
-    $form = $this->createFormBuilder($video)
-    ->add('name', TextType::class, [
-        'label' => 'URL de la vidéo',
-        'attr' => ['class' => 'form-control']
-    ])
-    ->add('save', SubmitType::class, [
-        'label' => 'Enregistrer',
-        'attr' => ['class' => 'btn btn-primary']
-    ])
-    ->getForm();
+        // Traitement du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newUrl = $form->get('name')->getData();
 
-    $form->handleRequest($request);
-
-     // Traitement du formulaire
-     if ($form->isSubmitted() && $form->isValid()) {
-        $newUrl = $form->get('name')->getData();
-
-        try {
-            // Passez la nouvelle URL à editVideo
-            $this->videoService->editVideo($video, $newUrl);
-            $this->addFlash('success', 'Vidéo mise à jour.');
-            return $this->redirectToRoute('app_trick_edit', ['slug' => $video->getTrick()->getSlug()]);
-        } catch (\InvalidArgumentException $e) {
-            $this->addFlash('error', $e->getMessage());
+            try {
+                // Passez la nouvelle URL à editVideo
+                $this->videoService->editVideo($video, $newUrl);
+                $this->addFlash('success', 'Vidéo mise à jour.');
+                return $this->redirectToRoute('app_trick_edit', ['slug' => $video->getTrick()->getSlug()]);
+            } catch (\InvalidArgumentException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
         }
-    
+
         return $this->render('video/edit.html.twig', [
             'form' => $form->createView(),
             'video' => $video
         ]);
-    }
-
-
-
     }
 }

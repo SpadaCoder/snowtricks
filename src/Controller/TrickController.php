@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\Image;
 use App\Form\TrickType;
 use App\Service\TrickServiceInterface;
@@ -42,7 +41,7 @@ class TrickController extends AbstractController
     {
         // Soit créer un nouveau Trick, soit récupérer celui qui correspond au slug
         $trick = new Trick();
-       
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
@@ -50,7 +49,10 @@ class TrickController extends AbstractController
             // Appeler le service Trick pour gérer la création du trick et l'upload des images
             $this->trickService->create($trick, $form, $this->getUser());
 
-            return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+            // Message flash
+            $this->addFlash('success', 'Le trick a été enregistré avec succès !');
+
+            return $this->redirectToRoute('app_home', ['_fragment' => 'tricks-list'], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('trick/new.html.twig', [
@@ -77,18 +79,18 @@ class TrickController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
 
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setTrick($trick);
-            $comment->setUser($this->getUser());
-            $comment->setCreated(new \DateTimeImmutable());
-            $comment->setModified(new \DateTimeImmutable());
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $comment->setTrick($trick);
+                $comment->setUser($this->getUser());
+                $comment->setCreated(new \DateTimeImmutable());
+                $comment->setModified(new \DateTimeImmutable());
 
-            $this->entityManagerInterface->persist($comment);
-            $this->entityManagerInterface->flush();
+                $this->entityManagerInterface->persist($comment);
+                $this->entityManagerInterface->flush();
 
-            return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
-        }
+                return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
+            }
         }
 
 
@@ -115,82 +117,34 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Associer l'utilisateur authentifié au trick.
-            $user = $this->getUser(); 
+            $user = $this->getUser();
 
             // Appeler le service Trick pour gérer la mise à jour du trick et l'upload des nouvelles images
             $this->trickService->update($trick, $form, $user);
+
+            // Message flash
+            $this->addFlash('success', 'Le trick a été enregistré avec succès !');
+
+            return $this->redirectToRoute('app_home', ['_fragment' => 'tricks-list'], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
             'form' => $form,
-            'isEdit' => true, // Mode édition
             'featuredImage' => $this->trickService->getFeaturedImageOrDefault($trick)
         ]);
     }
 
     #[Route('/{slug}', name: 'app_trick_delete', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function delete(Request $request, Trick $trick, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Trick $trick): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             // Appeler le service Trick pour supprimer le trick et ses images associées
             $this->trickService->delete($trick);
         }
 
         return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
-    }
-
-    #[Route('/image/delete/{id}', name: 'app_trick_delete_image', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function deleteImage(Request $request, Image $image, EntityManagerInterface $entityManager): RedirectResponse
-    {
-        // Vérification du token CSRF
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
-            // Supprimer l'image physiquement et de la base de données
-            $entityManager->remove($image);
-            $entityManager->flush();
-
-            // Supprimer le fichier physiquement (si nécessaire)
-            $this->imageService->deleteImage($image);
-
-            $this->addFlash('success', 'L\'image a été supprimée.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
-
-        // Redirection vers la même page (ou une autre page selon le contexte)
-        return $this->redirectToRoute('app_trick_edit', ['slug' => $image->getTrick()->getSlug()]);
-    }
-
-    #[Route('/image/edit/{id}', name: 'app_trick_edit_image', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editImage(Request $request, Image $image, ImageServiceInterface $imageService): Response
-    {
-        // Création d'un formulaire pour l'upload d'une nouvelle image
-        $form = $this->createFormBuilder()
-            ->add('imageFile', FileType::class, [
-                'label' => 'Sélectionnez une nouvelle image',
-                'mapped' => false,
-                'required' => true,
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Supprimer l'ancienne image et uploader la nouvelle
-            $newImageFile = $form->get('imageFile')->getData();
-            $this->imageService->replaceImage($image, $newImageFile);
-
-            // Redirection vers la page d'édition du trick
-            return $this->redirectToRoute('app_trick_edit', ['slug' => $image->getTrick()->getSlug()]);
-        }
-
-        return $this->render('trick/edit_image.html.twig', [
-            'form' => $form->createView(),
-            'image' => $image,
-        ]);
     }
 
 }

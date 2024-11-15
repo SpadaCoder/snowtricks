@@ -36,90 +36,95 @@
 		<div
 			class="trick-details">
 
-				{# Affiche les images et vidéos sous forme de miniatures #}
-				<div class="media-thumbnails">
-					{% for image in trick.images %}
-						<div class="media-container">
-							<img src="{{ asset('uploads/tricks/' ~ image.name) }}" alt="Miniature {{ loop.index }}" class="thumbnail-image">
-							<div class="icon-btn">
-								<a href="{{ path('app_image_edit', {'id': image.id}) }}">
-									<img src="{{ asset('images/edit-icon.png') }}" alt="Edit" style="width: 20px; height: 20px;">
-								</a>
-								<a href="{{ path('app_image_delete', {'id': image.id}) }}', '{{ csrf_token('delete' ~ image.id) }}">
-									<img src="{{ asset('images/delete-icon.png') }}" alt="Delete" style="width: 20px; height: 20px;">
-								</a>
-							</div>
+			{# Affiche le bouton pour afficher/masquer les médias #}
+			<div class="media-toggle">
+				<button id="toggle-media-btn" class="btn btn-primary d-block d-md-none">Voir les médias</button>
+			</div>
+
+			{# Affiche les images et vidéos sous forme de miniatures #}
+			<div id="media-thumbnails" class="media-thumbnails">
+				{% for image in trick.images %}
+					<div class="media-container">
+						<img src="{{ asset('uploads/tricks/' ~ image.name) }}" alt="Miniature {{ loop.index }}" class="thumbnail-image">
+						<div class="icon-btn">
+							<a href="{{ path('app_image_edit', {'id': image.id}) }}">
+								<img src="{{ asset('images/edit-icon.png') }}" alt="Modifier l'image" style="width: 20px; height: 20px;">
+							</a>
+							<a href="{{ path('app_image_delete', {'id': image.id}) }}', '{{ csrf_token('delete' ~ image.id) }}">
+								<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer l'image" style="width: 20px; height: 20px;">
+							</a>
 						</div>
-					{% endfor %}
+					</div>
+				{% endfor %}
 
-					{% for video in trick.videos %}
-						<div class="media-container">
-							<iframe src="{{ video.name }}" class="thumbnail-video" allowfullscreen></iframe>
-							<div class="icon-btn">
-								<a href="{{ path('app_video_edit', {'id': video.id}) }}" class="icon-btn">
-									<img src="{{ asset('images/edit-icon.png') }}" alt="Edit" style="width: 20px; height: 20px;">
-								</a>
+				{% for video in trick.videos %}
+					<div class="media-container">
+						<iframe src="{{ video.name }}" class="thumbnail-video" allowfullscreen></iframe>
+						<div class="icon-btn">
+							<a href="{{ path('app_video_edit', {'id': video.id}) }}" class="icon-btn">
+								<img src="{{ asset('images/edit-icon.png') }}" alt="Modifier la vidéo" style="width: 20px; height: 20px;">
+							</a>
 
-								<form action="{{ path('app_video_delete', {'id': video.id}) }}" method="POST">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
-									<button type="submit" class="icon-btn onclick=" return confirm('êtes-vous sûr de vouloir supprimer cette vidéo ?');">
-										<img src="{{ asset('images/delete-icon.png') }}" alt="Delete" style="width: 20px; height: 20px;">
-									</button>
-								</form>
-							</div>
+							<form action="{{ path('app_video_delete', {'id': video.id}) }}" method="POST">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+								<button type="submit" class="icon-btn" onclick=" return confirm('êtes-vous sûr de vouloir supprimer cette vidéo ?');">
+									<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
+								</button>
+							</form>
 						</div>
-					{% endfor %}
-				</div>
+					</div>
+				{% endfor %}
 			</div>
+		</div>
 
-			{# Champ de description #}
-			<div class="description-container">
-				{{ form_row(form.description, {'attr': {'class': 'description-textarea'}}) }}
-			</div>
+		{# Champ de description #}
+		<div class="description-container">
+			{{ form_row(form.description, {'attr': {'class': 'description-textarea'}}) }}
+		</div>
 
-			{# Détails en ligne en dessous : date de création, catégorie et date de modification #}
-			<div class="trick-info">
-				<span>Date de création :
-					{{ trick.created|date('d/m/Y') }}</span>
-				<span>Catégorie :
-					{{ form_row(form.category, {'label': false}) }}</span>
-				<span>Date de modification :
-					{{ trick.modified|date('d/m/Y') }}</span>
-			</div>
+		{# Détails en ligne en dessous : date de création, catégorie et date de modification #}
+		<div class="trick-info">
+			<span>Date de création :
+				{{ trick.created|date('d/m/Y') }}</span>
+			<span>Catégorie :
+				{{ form_row(form.category, {'label': false}) }}</span>
+			<span>Date de modification :
+				{{ trick.modified|date('d/m/Y') }}</span>
+		</div>
 
-			<div class="media-section">
-				<h2>Ajouter des médias</h2>
+		<div class="media-section">
+			<h2>Ajouter des médias</h2>
 
-				{# Section pour ajouter des vidéos #}
-				<div class="media-group">
-					<h3>Vidéos</h3>
-					{{ form_row(form.videos, {
+			{# Section pour ajouter des vidéos #}
+			<div class="media-group">
+				<h3>Vidéos</h3>
+				{{ form_row(form.videos, {
             'label': false,
             'attr': {'class': 'form-control', 'placeholder': 'Ajouter une URL de vidéo'}
         }) }}
-				</div>
+			</div>
 
-				{# Section pour ajouter des images #}
-				<div class="media-group">
-					<h3>Images</h3>
-					{{ form_row(form.images, {
+			{# Section pour ajouter des images #}
+			<div class="media-group">
+				<h3>Images</h3>
+				{{ form_row(form.images, {
             'label': false,
             'attr': {'class': 'form-control', 'placeholder': 'Télécharger des images'}
         }) }}
-				</div>
-
-				{# Bouton pour enregistrer les modifications #}
-				<div class="action-buttons">
-					<button type="submit" class="btn btn-primary">
-						<i class="fas fa-save"></i>
-						Enregistrer</button>
-					<a href="{{ path('app_home') }}" class="btn btn-secondary">
-						<i class="fas fa-arrow-left"></i>
-						Retour à la liste
-					</a>
-				</div>
-
-				{{ include('trick/_delete_form.html.twig') }}
 			</div>
-			{{ form_end(form) }}
-		{% endblock %}
+
+			{# Bouton pour enregistrer les modifications #}
+			<div class="action-buttons">
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-save"></i>
+					Enregistrer</button>
+				<a href="{{ path('app_home') }}" class="btn btn-secondary">
+					<i class="fas fa-arrow-left"></i>
+					Retour à la liste
+				</a>
+			</div>
+
+			{{ include('trick/_delete_form.html.twig') }}
+		</div>
+		{{ form_end(form) }}
+	{% endblock %}
