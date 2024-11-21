@@ -31,8 +31,13 @@
         display: none; /* Cache les médias par défaut sur les petits écrans */
     }
 
-    #media-toggle {
-        display: block; /* Afficher le bouton sur mobile */
+    .media-toggle {
+        display: flex;
+        justify-content: center;
+    }
+
+    #toggle-media-btn {
+        display: flex; 
     }
 
     /* Form container */

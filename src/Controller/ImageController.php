@@ -21,11 +21,10 @@ class ImageController extends AbstractController
     public function __construct(
         ImageServiceInterface $imageService,
         private readonly CsrfTokenManagerInterface $csrfTokenManager
-         )
-    {
+    ) {
         $this->imageService = $imageService;
     }
-    
+
     #[Route('/image', name: 'app_image')]
     public function index(): Response
     {
@@ -35,29 +34,29 @@ class ImageController extends AbstractController
     }
 
     #[Route('/image/confirm-delete/{id}', name: 'app_image_confirm_delete', methods: ['GET'])]
-public function confirmDelete(Image $image, CsrfTokenManagerInterface $csrfTokenManager): Response
-{
-    $csrfToken = $csrfTokenManager->getToken('delete' . $image->getId())->getValue();
+    public function confirmDelete(Image $image, CsrfTokenManagerInterface $csrfTokenManager): Response
+    {
+        $csrfToken = $csrfTokenManager->getToken('delete' . $image->getId())->getValue();
 
-    return $this->render('image/confirm_delete.html.twig', [
-        'image' => $image,
-        'csrf_token' => $csrfToken,
-    ]);
-}
+        return $this->render('image/confirm_delete.html.twig', [
+            'image' => $image,
+            'csrf_token' => $csrfToken,
+        ]);
+    }
 
-    #[Route('/image/delete/{id}', name: 'app_image_delete', methods: ['POST'])]
+    #[Route('/image/delete/{id}', name: 'app_image_delete', methods: ['GET'])]
     public function deleteImage(Request $request, Image $image, CsrfTokenManagerInterface $csrfTokenManager): RedirectResponse
     {
-// Récupérer le slug de l'image ou de son trick
-$slug = $image->getTrick()->getSlug(); 
+        // Récupérer le slug de l'image ou de son trick
+        $slug = $image->getTrick()->getSlug();
 
-// Validation du token CSRF
-if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $image->getId(), $request->request->get('_token')))) {
-    $this->imageService->deleteImage($image);
-    $this->addFlash('success', 'L\'image a été supprimée.');
-} else {
-    $this->addFlash('error', 'Token CSRF invalide.');
-}
+        // Validation du token CSRF
+        if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $image->getId(), $request->query->get('_token')))) {
+            $this->imageService->deleteImage($image);
+            $this->addFlash('success', 'L\'image a été supprimée.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
 
         return $this->redirectToRoute('app_trick_edit', ['slug' => $slug]);
     }
@@ -67,10 +66,10 @@ if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $image->getId(), $r
     {
         $form = $this->createFormBuilder()
             ->add('imageFile', FileType::class, [
-                'label' => 'Sélectionnez une nouvelle image',
-                'mapped' => false,
-                'required' => true,
-            ])
+                    'label' => 'Sélectionnez une nouvelle image',
+                    'mapped' => false,
+                    'required' => true,
+                ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -87,4 +86,6 @@ if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $image->getId(), $r
             'image' => $image,
         ]);
     }
+
+
 }

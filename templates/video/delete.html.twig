@@ -1,0 +1,10 @@
+{# <form action="{{ path('app_video_delete', {'id': video.id}) }}" method="POST">
+	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+	<button type="input" class="icon-btn" onclick=" return confirm('êtes-vous sûr de vouloir supprimer cette vidéo ?');">
+		<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
+	</button>
+</form> #}
+
+<a href="{{ path('app_video_delete', {'id': video.id}) }}', '{{ csrf_token('delete' ~ video.id) }}">
+	<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
+</a>

@@ -135,10 +135,11 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_trick_delete', methods: ['POST'])]
+    #[Route('/{slug}/delete', name: 'app_trick_delete', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function delete(Request $request, Trick $trick): Response
     {
+        
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             // Appeler le service Trick pour supprimer le trick et ses images associées
             $this->trickService->delete($trick);
