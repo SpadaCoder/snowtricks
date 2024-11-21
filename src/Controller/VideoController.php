@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\TrickRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 #[Route('/video')]
 class VideoController extends AbstractController
@@ -24,13 +26,18 @@ class VideoController extends AbstractController
         $this->trickRepository = $trickRepository;
     }
 
-    #[Route('/delete/{id}', name: 'app_video_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_video_delete', methods: ['GET'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function delete(Video $video, Request $request): Response
+    public function delete(Video $video, Request $request, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
-        
-        $trick = $this->videoService->removeVideo($video);
-        dd($trick);
+
+        if ($csrfTokenManager->isTokenValid(new CsrfToken('delete' . $video->getId(), $request->query->get('_token')))) {
+            $trick = $this->videoService->removeVideo($video);
+            $this->addFlash('success', 'La vidéo a été supprimée.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
 
         return $this->redirectToRoute('app_trick_edit', ['slug' => $trick->getSlug()]);
     }

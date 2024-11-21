@@ -38,7 +38,7 @@
 
 			{# Affiche le bouton pour afficher/masquer les médias #}
 			<div class="media-toggle">
-				<button id="toggle-media-btn" class="btn btn-primary d-block d-md-none">Voir les médias</button>
+				<button id="toggle-media-btn" class="btn btn-primary">Voir les médias</button>
 			</div>
 
 			{# Affiche les images et vidéos sous forme de miniatures #}
@@ -50,7 +50,7 @@
 							<a href="{{ path('app_image_edit', {'id': image.id}) }}">
 								<img src="{{ asset('images/edit-icon.png') }}" alt="Modifier l'image" style="width: 20px; height: 20px;">
 							</a>
-							<a href="{{ path('app_image_delete', {'id': image.id}) }}', '{{ csrf_token('delete' ~ image.id) }}">
+							<a href="{{ path('app_image_delete', {'id': image.id, '_token': csrf_token('delete' ~ image.id) }) }}">
 								<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer l'image" style="width: 20px; height: 20px;">
 							</a>
 						</div>
@@ -64,13 +64,9 @@
 							<a href="{{ path('app_video_edit', {'id': video.id}) }}" class="icon-btn">
 								<img src="{{ asset('images/edit-icon.png') }}" alt="Modifier la vidéo" style="width: 20px; height: 20px;">
 							</a>
-
-							<form action="{{ path('app_video_delete', {'id': video.id}) }}" method="POST">
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
-								<button type="submit" class="icon-btn" onclick=" return confirm('êtes-vous sûr de vouloir supprimer cette vidéo ?');">
-									<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
-								</button>
-							</form>
+							<a href="{{ path('app_video_delete', {'id': video.id, '_token':'{{ csrf_token('delete' ~ video.id) }) }}">
+								<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
+							</a>
 						</div>
 					</div>
 				{% endfor %}

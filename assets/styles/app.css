@@ -132,6 +132,10 @@ body {
     font-size: 1em;
 }
 
+#toggle-media-btn {
+    display: none;
+}
+
 .media-thumbnails {
     display: flex;
     gap: 10px;
