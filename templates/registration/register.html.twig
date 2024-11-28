@@ -1,21 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Créer de compte
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="login-form">
+	<h1 class="text-center mb-4">Créer un compte</h1>
 
-    {{ form_errors(registrationForm) }}
+	{{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.lastname) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+	{{ form_start(registrationForm, { 'attr': { 'class': 'needs-validation' } }) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-{% endblock %}
+
+	{# Champ Nom d'utilisateur #}
+	<div class="form-group mb-3">
+		{{ form_label(registrationForm.username, 'Nom d\'utilisateur', { 'label_attr': { 'class': 'form-label' } }) }}
+                    {{ form_widget(registrationForm.username, { 'attr': { 'class': 'form-control' } }) }}
+                    {{ form_errors(registrationForm.username) }}
+                </div>
+
+                {# Champ Nom de famille #}
+                <div class="form-group mb-3">
+                    {{ form_label(registrationForm.lastname, 'Nom', { 'label_attr': { 'class': 'form-label' } }) }}
+                    {{ form_widget(registrationForm.lastname, { 'attr': { 'class': 'form-control' } }) }}
+                    {{ form_errors(registrationForm.lastname) }}
+                </div>
+
+                {# Champ Email #}
+                <div class="form-group mb-3">
+                    {{ form_label(registrationForm.email, 'Email', { 'label_attr': { 'class': 'form-label' } }) }}
+                    {{ form_widget(registrationForm.email, { 'attr': { 'class': 'form-control' } }) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                {# Champ Mot de passe #}
+                <div class="form-group mb-3">
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', { 'label_attr': { 'class': 'form-label' } }) }}
+                    {{ form_widget(registrationForm.plainPassword, { 'attr': { 'class': 'form-control' } }) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                {# Champ Avatar / ProfilPicture #}
+                <div class="form-group mb-3">
+                    {{ form_label(registrationForm.profilPicture, 'Photo de profil', { 'label_attr': { 'class': 'form-label' } }) }}
+                    {{ form_widget(registrationForm.profilPicture, { 'attr': { 'class': 'form-control' } }) }}
+                    {{ form_errors(registrationForm.profilPicture) }}
+                </div>
+
+                {# Champ Conditions d'utilisation #}
+                <div class="checkbox mb-3">
+<label for="{{ registrationForm.agreeTerms.vars.id }}" class="form-check-label">
+    <a href="{{ path('app_terms') }}">J'accepte les termes et conditions</a>
+</label>
+            {{ form_widget(registrationForm.agreeTerms, { 'attr': { 'class': 'checkbox' } }) }}
+			{{ form_errors(registrationForm.agreeTerms) }}
+		</div>
+
+		<button class="btn btn-lg btn-primary" type="submit">Créer un compte</button>
+		{{ form_end(registrationForm) }}
+	{% endblock %}

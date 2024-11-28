@@ -20,7 +20,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('profilPicture', FileType::class, [
-                'label' => 'Profil Picture (JPEG, PNG)',
+                'label' => 'Image de profil (JPEG, PNG)',
                 'mapped' => false, // Non lié directement à l'entité User pour gérer le fichier manuellement
                 'required' => true,
                 'constraints' => [

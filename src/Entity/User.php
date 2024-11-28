@@ -48,8 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $modified = null;
 
-    #[ORM\Column]
-    private ?bool $isVerified = null;
+
 
     /**
      * @var Collection<int, Image>
@@ -71,6 +70,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $profilPicture = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = false;
 
     public function __construct()
     {
@@ -203,17 +205,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): ?bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Image>
@@ -313,6 +304,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfilPicture(string $profilPicture): static
     {
         $this->profilPicture = $profilPicture;
+
+        return $this;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

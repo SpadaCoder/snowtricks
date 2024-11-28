@@ -9,7 +9,7 @@
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 
-		<h1 class="form-title">Please sign in</h1>
+		<h1 class="form-title">Connexion</h1>
 
 		<label for="inputUsername">Nom d'utilisateur</label>
 		<input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
@@ -20,7 +20,7 @@
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 		<div class="mb-3">
-			<a href="{{ path('app_forgot_password') }}" class="forgot-password">Oubli de mot de passe?</a>
+			<a href="{{ path('app_forgot_password') }}" class="forgot-password">Mot de passe oublié?</a>
 		</div>
 
 		<div class="checkbox mb-3">
