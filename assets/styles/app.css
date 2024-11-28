@@ -506,3 +506,51 @@ display: none;
     margin-right: 5px; 
 }
 
+/*Conditions Générales*/
+
+terms-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.terms-container h1 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.terms-container h2 {
+    font-size: 1.5em;
+    margin-top: 20px;
+    color: #444;
+}
+
+.terms-container p, .terms-container ul {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.terms-container ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.terms-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.terms-container a:hover {
+    text-decoration: underline;
+}
+
+.footer-note {
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 30px;
+}

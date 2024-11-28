@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales{% endblock %}
+
+{% block body %}
+<div class="terms-container">
+    <h1>Conditions Générales d'Utilisation</h1>
+
+    <p>Les présentes conditions générales (ci-après "CGU") régissent l'utilisation du site accessible à l'adresse 
+    <a href="{{ app.request.schemeAndHttpHost }}">{{ app.request.schemeAndHttpHost }}</a> (ci-après "le Site").</p>
+    
+    <section>
+        <h2>Article 1 - Objet</h2>
+        <p>Les présentes CGU définissent les modalités et conditions d'accès et d'utilisation du Site par les utilisateurs.</p>
+    </section>
+
+    <section>
+        <h2>Article 2 - Mentions légales</h2>
+        <ul>
+            <li><strong>Nom de l'entreprise :</strong> Snowtricks</li>
+            <li><strong>Email :</strong> snowtricks@gmx.com</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Article 3 - Propriété intellectuelle</h2>
+        <p>Tous les éléments du Site (textes, images, vidéos, logos) sont protégés par le droit de la propriété intellectuelle.</p>
+    </section>
+
+    <section>
+        <h2>Article 4 - Responsabilités</h2>
+        <p>Le Site décline toute responsabilité en cas d’interruptions, de bugs ou de dommages directs ou indirects liés à son utilisation.</p>
+    </section>
+
+    <section>
+        <h2>Article 5 - Données personnelles</h2>
+        <p>Le traitement des données personnelles respecte les dispositions légales en vigueur, notamment le RGPD.</p>
+    </section>
+
+    <section>
+        <h2>Article 6 - Loi applicable</h2>
+        <p>Les présentes CGU sont régies par la loi française. Tout litige sera soumis à la compétence exclusive des tribunaux français.</p>
+    </section>
+
+    <p class="footer-note">Pour toute question concernant les CGU, contactez-nous à <a href="mailto:sowtricks@gmx.com">sowtricks@gmx.com</a>.</p>
+</div>
+{% endblock %}
