@@ -37,4 +37,24 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form,
         ]);
     }
+
+    /**
+     * @Route("/verify/email/{token}", name="app_verify_email")
+     */
+    public function verifyEmail(string $token): Response
+    {
+        // Logique pour vérifier le token et activer l'utilisateur
+        // Exemple de recherche d'un utilisateur par le token et activation
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['verificationToken' => $token]);
+
+        if ($user) {
+            $user->setIsVerified(true);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('app_home');  // Rediriger vers la page d'accueil après confirmation
+        }
+
+        // Gestion des erreurs si le token est invalide
+        return $this->render('registration/error.html.twig');
+    }
 }

@@ -23,11 +23,10 @@ interface ImageServiceInterface
      *
      * @param UploadedFile $imageFile Le fichier image à télécharger.
      * @param User $user L'utilisateur associé à l'image.
-     * @param Trick|null $trick Le trick auquel l'image sera associée (optionnel).
      *
      * @return Image L'entité Image créée et persistée.
      */
-    public function uploadImage(UploadedFile $imageFile, User $user, ?Trick $trick = null): Image;
+    public function uploadImage(UploadedFile $imageFile, User $user): Image;
 
     /**
      * Supprime une image de la base de données et du serveur.

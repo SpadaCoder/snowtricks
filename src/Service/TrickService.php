@@ -45,7 +45,7 @@ class TrickService implements TrickServiceInterface
      * 
      * @param Trick $trick L'entité Trick à sauvegarder.
      */
-    public function save(Trick $trick)
+    public function save(Trick $trick) : void
     {
         $this->entityManager->persist($trick);
         $this->entityManager->flush();

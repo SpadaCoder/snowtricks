@@ -27,7 +27,7 @@ services:
             $imagesDirectory: '%images_directory%'
             $entityManager: '@doctrine.orm.entity_manager'
 
-     App\Service\UserService:
+    App\Service\UserService:
         arguments:
             $profilDirectory: '%profils_directory%'
     # add more service definitions when explicit configuration is needed
