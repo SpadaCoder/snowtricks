@@ -33,8 +33,8 @@ Vous pouvez récupérer la base de donnée dans le dossier db.
 Vous devez créer un fichier dénommé data.php avec les information suivantes :
 ```bash
 $dbServer = 'localhost';
-$dbUser = 'blog_w';
-$dbPassword = 'password';
+$dbUser = 'snowtricks_w';
+$dbPassword = 'eudmdKxf26+';
 $dbBase = 'snowtricks';
 ```
 
