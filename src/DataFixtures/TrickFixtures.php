@@ -3,8 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Trick;
-use App\Entity\User;
-use App\Entity\Category;
 use App\Service\Slugger;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -21,8 +19,9 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        // Récupérer l'utilisateur avec l'ID 1
-        $user = $manager->getRepository('App\Entity\User')->find(1);
+        // Récupérer l'utilisateur par défaut
+        $user = $this->getReference('default_user');
+
 
         // Les tricks.
         $tricks = [
@@ -69,7 +68,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            TrickCategoryFixtures::class, // Dépendance à TrickCategoryFixtures pour que les catégories soient déjà présentes
+            UserFixtures::class,
+            TrickCategoryFixtures::class,
         ];
     }
 }

@@ -69,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comment;
 
     #[ORM\Column(length: 255)]
-    private ?string $profilPicture = null;
+    private ?string $profilPicture = 'public\images\default-profil.png';
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $isVerified = false;
