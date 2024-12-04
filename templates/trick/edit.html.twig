@@ -64,7 +64,7 @@
 							<a href="{{ path('app_video_edit', {'id': video.id}) }}" class="icon-btn">
 								<img src="{{ asset('images/edit-icon.png') }}" alt="Modifier la vidéo" style="width: 20px; height: 20px;">
 							</a>
-							<a href="{{ path('app_video_delete', {'id': video.id, '_token':'{{ csrf_token('delete' ~ video.id) }) }}">
+							<a href="{{ path('app_video_delete', {'id': video.id, '_token': csrf_token('delete' ~ video.id) }) }}">
 								<img src="{{ asset('images/delete-icon.png') }}" alt="Supprimer la vidéo" style="width: 20px; height: 20px;">
 							</a>
 						</div>

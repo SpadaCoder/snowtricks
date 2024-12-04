@@ -6,13 +6,26 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Service\UserServiceInterface;
 use App\Service\EmailServiceInterface;
+use App\Security\EmailVerifier;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegistrationController extends AbstractController
 {
+    private $verifyEmailHelper;
+    private $entityManager;
+
+    public function __construct(VerifyEmailHelperInterface $verifyEmailHelper, EntityManagerInterface $entityManager)
+    {
+        $this->verifyEmailHelper = $verifyEmailHelper;
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
@@ -38,23 +51,23 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/verify/email/{token}", name="app_verify_email")
-     */
-    public function verifyEmail(string $token): Response
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, EmailVerifier $emailVerifier): Response
     {
-        // Logique pour vérifier le token et activer l'utilisateur
-        // Exemple de recherche d'un utilisateur par le token et activation
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['verificationToken' => $token]);
+        // Récupérer l'ID de l'utilisateur depuis l'URL
+        $userId = $request->query->get('userId');
 
-        if ($user) {
-            $user->setIsVerified(true);
-            $this->getDoctrine()->getManager()->flush();
+        $user = $this->entityManager->getRepository(User::class)->find($userId);
 
-            return $this->redirectToRoute('app_home');  // Rediriger vers la page d'accueil après confirmation
+        try {
+            $emailVerifier->handleEmailConfirmation($request, $user);
+        } catch (VerifyEmailExceptionInterface $exception) {
+            $this->addFlash('verify_email_error', $exception->getReason());
+            return $this->redirectToRoute('app_register');
         }
 
-        // Gestion des erreurs si le token est invalide
-        return $this->render('registration/error.html.twig');
+        $this->addFlash('success', 'Votre email a été vérifié !');
+
+        return $this->redirectToRoute('app_home');
     }
 }
