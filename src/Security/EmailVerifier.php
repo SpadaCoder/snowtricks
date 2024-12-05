@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Security\signatureData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +17,15 @@ class EmailVerifier
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager
-    ) {
-    }
+    ) {}
 
     public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
-            $user->getEmail()
+            $user->getEmail(),
+            ['userId' => $user->getId(), 'userEmail' => $user->getEmail()]
         );
 
         $context = $email->getContext();
@@ -40,10 +41,18 @@ class EmailVerifier
     /**
      * @throws VerifyEmailExceptionInterface
      */
-    public function handleEmailConfirmation(Request $request, User $user): void
+    public function handleEmailConfirmation(Request $request): void
     {
-        $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, (string) $user->getId(), $user->getEmail());
+        // Récupérer les paramètres directement depuis la requête
+        $userId = $request->query->get('userId');
+        $userEmail = $request->query->get('userEmail');
 
+        // Valider l'URL signée et extraire les paramètres
+        $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, $userId, $userEmail);
+        
+        // Récupérer l'utilisateur en base
+        $user = $this->entityManager->getRepository(User::class)->find($userId);
+        
         $user->setVerified(true);
 
         $this->entityManager->persist($user);

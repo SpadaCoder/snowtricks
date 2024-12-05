@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController
             $userService->processRegistrationForm($form, $user);
 
             // Envoi de l'email de validation
-            $emailService->sendEmailConfirmation($user, 'app_verify_email', 'snowtricks@gmx.com');
+            $emailService->sendEmailConfirmation($user, 'app_verify_email', 'no-reply@mailtrap.club');
 
             return $this->redirectToRoute('app_home');
         }
@@ -54,13 +54,10 @@ class RegistrationController extends AbstractController
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, EmailVerifier $emailVerifier): Response
     {
-        // Récupérer l'ID de l'utilisateur depuis l'URL
-        $userId = $request->query->get('userId');
-
-        $user = $this->entityManager->getRepository(User::class)->find($userId);
-
         try {
-            $emailVerifier->handleEmailConfirmation($request, $user);
+            // Valider et extraire les informations de l'URL signée
+            $emailVerifier->handleEmailConfirmation($request);
+            
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
             return $this->redirectToRoute('app_register');
@@ -68,6 +65,6 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Votre email a été vérifié !');
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_login');
     }
 }
