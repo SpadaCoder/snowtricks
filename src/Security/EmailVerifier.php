@@ -25,7 +25,7 @@ class EmailVerifier
             $verifyEmailRouteName,
             (string) $user->getId(),
             $user->getEmail(),
-            ['userId' => $user->getId(), 'userEmail' => $user->getEmail()],
+            ['userId' => $user->getId()],
         );
 
         $context = $email->getContext();
@@ -45,7 +45,7 @@ class EmailVerifier
     {
         // Récupérer les paramètres directement depuis la requête
         $userId = $request->query->get('userId');
-        $userEmail = $request->query->get('userEmail');
+        $userEmail = $this->entityManager->getRepository(User::class)->find($userId) ->getEmail();
 
         // Valider l'URL signée et extraire les paramètres
         $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, $userId, $userEmail);
