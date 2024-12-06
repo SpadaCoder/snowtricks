@@ -25,7 +25,7 @@ class EmailVerifier
             $verifyEmailRouteName,
             (string) $user->getId(),
             $user->getEmail(),
-            ['userId' => $user->getId(), 'userEmail' => $user->getEmail()]
+            ['userId' => $user->getId(), 'userEmail' => $user->getEmail()],
         );
 
         $context = $email->getContext();
@@ -41,7 +41,7 @@ class EmailVerifier
     /**
      * @throws VerifyEmailExceptionInterface
      */
-    public function handleEmailConfirmation(Request $request): void
+    public function handleEmailConfirmation(Request $request): User
     {
         // Récupérer les paramètres directement depuis la requête
         $userId = $request->query->get('userId');
@@ -52,10 +52,7 @@ class EmailVerifier
         
         // Récupérer l'utilisateur en base
         $user = $this->entityManager->getRepository(User::class)->find($userId);
-        
-        $user->setVerified(true);
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        return $user;
     }
 }

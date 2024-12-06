@@ -15,8 +15,7 @@ class UserService implements UserServiceInterface
         private UserPasswordHasherInterface $passwordHasher,
         private EntityManagerInterface $entityManager,
         private string $profilDirectory
-    ) {
-    }
+    ) {}
 
     public function processRegistrationForm(FormInterface $form, User $user): void
     {
@@ -35,11 +34,10 @@ class UserService implements UserServiceInterface
         $user->setRoles(['ROLE_USER']);
 
         // Enregistrement dans la base de données
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->save($user);
     }
 
-    private function setUserPassword(User $user, string $plainPassword): void
+    public function setUserPassword(User $user, string $plainPassword): void
     {
         $user->setPassword(
             $this->passwordHasher->hashPassword($user, $plainPassword)
@@ -60,5 +58,22 @@ class UserService implements UserServiceInterface
         } catch (FileException $e) {
             throw new \RuntimeException('Erreur lors du téléchargement de l\'image de profil.', 0, $e);
         }
+    }
+
+    public function verifyUser(User $user): void
+    {
+        $user->setVerified(true);
+
+        $this->save($user);
+    }
+
+    // Fonction save pour persister et flusher l'entité User
+    public function save(User $user): void
+    {
+        // Persist de l'entité User
+        $this->entityManager->persist($user);
+
+        // Flusher pour enregistrer dans la base de données
+        $this->entityManager->flush();
     }
 }
